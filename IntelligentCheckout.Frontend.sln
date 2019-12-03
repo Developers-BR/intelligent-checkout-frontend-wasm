@@ -3,11 +3,16 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.29519.161
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IntelligentCheckout.Frontend.Server", "Server\IntelligentCheckout.Frontend.Server.csproj", "{F4E924A5-440B-47D6-BBC0-DA5AFFCE9156}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IntelligentCheckout.Frontend.Server", "Server\IntelligentCheckout.Frontend.Server.csproj", "{F4E924A5-440B-47D6-BBC0-DA5AFFCE9156}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IntelligentCheckout.Frontend.Client", "Client\IntelligentCheckout.Frontend.Client.csproj", "{8CAACEB4-E945-4CE8-A1D1-9E18B5D4AE5C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IntelligentCheckout.Frontend.Client", "Client\IntelligentCheckout.Frontend.Client.csproj", "{8CAACEB4-E945-4CE8-A1D1-9E18B5D4AE5C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IntelligentCheckout.Frontend.Shared", "Shared\IntelligentCheckout.Frontend.Shared.csproj", "{07B44B8A-C19B-4D73-90C1-69D80149250E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IntelligentCheckout.Frontend.Shared", "Shared\IntelligentCheckout.Frontend.Shared.csproj", "{07B44B8A-C19B-4D73-90C1-69D80149250E}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{CC484410-77C2-463C-8AA8-06F1078BD2BE}"
+	ProjectSection(SolutionItems) = preProject
+		azure-pipelines.yml = azure-pipelines.yml
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

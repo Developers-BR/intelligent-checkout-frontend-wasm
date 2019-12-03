@@ -14,9 +14,9 @@ steps:
 - task: DotNetCoreInstaller@0
   displayName: 'Installing .NET Core SDK...'
   inputs:
-    version: 3.1.0-preview3.19555.2
+    version: 3.1.0
 
-- script: dotnet build --configuration $(buildConfiguration) BuildAndDeploy/BuildAndDeploy.csproj
+- script: dotnet build --configuration $(buildConfiguration) Server/IntelligentCheckout.Frontend.Server.csproj
   displayName: 'Building $(buildConfiguration)...'
 
 - task: DotNetCoreCLI@2
@@ -24,7 +24,7 @@ steps:
   inputs:
     command: publish
     publishWebProjects: true
-    arguments: '--configuration $(BuildConfiguration) --output $(Build.ArtifactStagingDirectory)'
+    arguments: '--configuration $(BuildConfiguration) --output $(Build.ArtifactStagingDirectory) --self-contained true'
     zipAfterPublish: false
 
 - task: PublishBuildArtifacts@1
