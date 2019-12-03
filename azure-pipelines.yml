@@ -10,11 +10,13 @@ pool:
   vmImage: 'vs2017-win2016'
 
 steps:
-
-- task: DotNetCoreInstaller@0
-  displayName: 'Installing .NET Core SDK...'
+- task: UseDotNet@2
+  displayName: 'Install .net core 3.1
   inputs:
-    version: 3.1.0-preview3.19555.2
+    packageType: sdk
+    version: 3.1.x
+    includePreviewVersions: true
+    installationPath: $(Agent.ToolsDirectory)/dotnet
 
 - script: dotnet build --configuration $(buildConfiguration) BuildAndDeploy/BuildAndDeploy.csproj
   displayName: 'Building $(buildConfiguration)...'
