@@ -1,8 +1,3 @@
-# Starter pipeline
-# Start with a minimal pipeline that you can customize to build and deploy your code.
-# Add steps that build, run tests, deploy, and more:
-# https://aka.ms/yaml
-
 trigger:
 - master
 
@@ -10,13 +5,15 @@ pool:
   vmImage: 'vs2017-win2016'
 
 steps:
-
-- task: DotNetCoreInstaller@0
-  displayName: 'Installing .NET Core SDK...'
+- task: UseDotNet@2
+  displayName: 'Install .net core 3.1'
   inputs:
-    version: 3.1.0
+    packageType: sdk
+    version: 3.1.x
+    includePreviewVersions: true
+    installationPath: '$(Agent.ToolsDirectory)/dotnet'
 
-- script: dotnet build --configuration $(buildConfiguration) Server/IntelligentCheckout.Frontend.Server.csproj
+- script: dotnet build --configuration $(buildConfiguration) **/*.csproj
   displayName: 'Building $(buildConfiguration)...'
 
 - task: DotNetCoreCLI@2
@@ -24,7 +21,7 @@ steps:
   inputs:
     command: publish
     publishWebProjects: true
-    arguments: '--configuration $(BuildConfiguration) --output $(Build.ArtifactStagingDirectory) --self-contained true'
+    arguments: '--configuration $(BuildConfiguration) --output $(Build.ArtifactStagingDirectory)'
     zipAfterPublish: false
 
 - task: PublishBuildArtifacts@1
