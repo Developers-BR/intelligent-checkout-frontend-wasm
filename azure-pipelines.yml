@@ -23,6 +23,7 @@ steps:
   displayName: 'Publishing App...'
   inputs:
     command: publish
+    publishWebProjects: false
     projects: 'Server/IntelligentCheckout.Frontend.Server.csproj'
     arguments: '--configuration $(buildConfiguration) --output $(Build.ArtifactStagingDirectory)'
     zipAfterPublish: true
