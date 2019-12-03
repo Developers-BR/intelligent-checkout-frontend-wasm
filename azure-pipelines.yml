@@ -25,7 +25,7 @@ steps:
     command: publish
     publishWebProjects: false
     projects: 'Server/IntelligentCheckout.Frontend.Server.csproj'
-    arguments: '--configuration $(buildConfiguration) --output $(Build.ArtifactStagingDirectory) --self-contained true'
+    arguments: '--configuration $(buildConfiguration) --output $(Build.ArtifactStagingDirectory) -r win-x64 --self-contained true'
     zipAfterPublish: true
 
 - task: PublishBuildArtifacts@1
