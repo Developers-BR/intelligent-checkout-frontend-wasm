@@ -13,7 +13,7 @@ steps:
     includePreviewVersions: true
     installationPath: '$(Agent.ToolsDirectory)/dotnet'
 
-- script: dotnet build --configuration $(buildConfiguration) **/*.csproj
+- script: dotnet build --configuration $(buildConfiguration) Server/IntelligentCheckout.Frontend.Server.csproj
   displayName: 'Building $(buildConfiguration)...'
 
 - task: DotNetCoreCLI@2
