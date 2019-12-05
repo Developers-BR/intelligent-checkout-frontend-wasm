@@ -6,10 +6,14 @@
 
 <div class="main">
     <div class="top-row px-4">
-        <a href="http://blazor.net" target="_blank" class="ml-md-auto">About</a>
+        <a href="http://blazor.net" target="_blank" class="ml-md-auto">@qtdCarrinho items<i class="ml-2 oi oi-cart"></i></a>
     </div>
 
     <div class="content px-4">
         @Body
     </div>
 </div>
+
+@code {
+    private int qtdCarrinho = 0;
+}
