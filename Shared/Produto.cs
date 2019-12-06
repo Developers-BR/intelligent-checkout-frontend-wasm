@@ -27,5 +27,10 @@ namespace IntelligentCheckout.Frontend.Shared
         public string Descricao { get; private set; }
         public decimal Preco { get; private set; }
         public List<string> Fotos { get; private set; }
+
+        public string ObterPrecoFormatado()
+        {
+            return $"R$ {Preco:C2}";
+        }
     }
 }

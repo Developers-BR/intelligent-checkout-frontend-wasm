@@ -1,16 +1,34 @@
 ﻿@page "/"
+@using IntelligentCheckout.Frontend.Shared
+@using IntelligentCheckout.Frontend.Client.Components
+@inject HttpClient httpClient
 
-<h1>Seja bem vindo!</h1>
-<hr/>
-<p>Bem vindo a demonstração do checkout inteligente, uma aplicação de demonstração de um sistema de compra com pagamento através de confirmação por identificação facial.</p>
+<div class="card-deck">
+    @if (Produtos == null)
+    {
+        <div class="row">
+            <div class="col-sm-12">
+                <center>Carregando...</center>
+            </div>
+        </div>
+    }
+    else
+    {
+        <div class="card-deck">
+            @foreach(Produto prod in Produtos)
+            {
+                <CardProduto Produto="@prod" />
+            }
+        </div>
+    }
+</div>
 
-<p>Esta solução apresenta a integração de diversas tecnologias como:</p>
+@code {
+    private Produto[] Produtos;
 
-<p>
-    <ul>
-        <li>ASP.NET Core</li>
-        <li>Blazor</li>
-        <li>Azure Cognitive Services</li>
-        <li>Blockchain</li>
-    </ul>
-</p>
+    protected override async Task OnInitializedAsync()
+    {
+        //var resp = await httpClient.GetStringAsync("/produtos.json");
+        //Produtos = JsonConverter
+    }
+}

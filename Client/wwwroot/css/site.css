@@ -26,13 +26,21 @@ app {
     align-items: center;
 }
 
+a {
+    color: #fff;
+}
+
+a:hover {
+    color: #fff;
+}
+
 .main {
     flex: 1;
 }
 
     .main .top-row {
-        background-color: rgba(107, 41, 41, 0.7);
-        justify-content: flex-end;
+        background-color: rgb(0, 154, 120);
+        justify-content: center;
     }
 
         .main .top-row > a, .main .top-row .btn-link {
@@ -40,6 +48,33 @@ app {
             margin-left: 1.5rem;
             color: #fff
         }
+
+#input-search {
+    box-shadow: 0 1px 2px 0 rgba(0,0,0,.2);
+    padding: 7px 60px 9px 15px;
+    border-radius: 2px;
+    background-color: #fff;
+    border: 0 rgba(0, 0, 0, 0.2);
+}
+
+#nav-search-btn {
+    background-image: none;
+    height: 26px;
+    padding-top: 2px;
+    cursor: pointer;
+    border-radius: 0 2px 2px 0;
+    width: 46px;
+    border: 0 rgba(0, 0, 0, 0.2);
+    background-color: #fff;
+    top: 7px;
+    right: 1px;
+    left: auto;
+    z-index: 920;
+    position: absolute;
+    padding: 0;
+    color: #666;
+    font-size: 14px;
+}
 
 .main .top-row a:first-child {
     overflow: hidden;

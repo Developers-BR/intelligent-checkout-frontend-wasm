@@ -6,6 +6,11 @@ namespace IntelligentCheckout.Frontend.Shared
 {
     public class ProdutoIEnumerableResposta : Resposta
     {
+        public ProdutoIEnumerableResposta() : base(null, null)
+        {
+
+        }
+
         public ProdutoIEnumerableResposta(List<Aviso> avisos, Erro erro, List<Produto> data) : base(avisos, erro)
         {
             Data = data;
