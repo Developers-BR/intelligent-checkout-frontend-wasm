@@ -1,7 +1,36 @@
 ﻿@page "/"
+@using IntelligentCheckout.Frontend.Models
+@using IntelligentCheckout.Frontend.Components.Produtos
+@inject HttpClient HttpClient
 
-<h1>Hello, world!</h1>
+<div class="container">
+    @if (Produtos == null)
+    {
+        <div class="row">
+            <div class="col-sm-12">
+                <center>Carregando...</center>
+            </div>
+        </div>
+    }
+    else
+    {
+        <div class="row mt-4">
+            @foreach(Produto prod in Produtos)
+            {
+                <div class="col-sm col-md-3 col-lg-4 mb-4">
+                    <CardProduto Produto="@prod" />
+                </div>
+            }
+        </div>
+    }
+</div>
 
-Welcome to your new app.
+@code {
+    private Produto[] Produtos;
 
-<SurveyPrompt Title="How is Blazor working for you?" />
+    protected override async Task OnInitializedAsync()
+    {
+        var response = await HttpClient.GetJsonAsync<ProdutoIEnumerableResposta>("/sample-data/produtos.json");
+        Produtos = response.Data.ToArray();
+    }
+}
