@@ -1,42 +1,34 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.29519.161
-MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IntelligentCheckout.Frontend.Server", "Server\IntelligentCheckout.Frontend.Server.csproj", "{F4E924A5-440B-47D6-BBC0-DA5AFFCE9156}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IntelligentCheckout.Frontend.Client", "Client\IntelligentCheckout.Frontend.Client.csproj", "{8CAACEB4-E945-4CE8-A1D1-9E18B5D4AE5C}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IntelligentCheckout.Frontend.Shared", "Shared\IntelligentCheckout.Frontend.Shared.csproj", "{07B44B8A-C19B-4D73-90C1-69D80149250E}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{CC484410-77C2-463C-8AA8-06F1078BD2BE}"
-	ProjectSection(SolutionItems) = preProject
-		azure-pipelines.yml = azure-pipelines.yml
-	EndProjectSection
+# Visual Studio 15
+VisualStudioVersion = 15.0.26124.0
+MinimumVisualStudioVersion = 15.0.26124.0
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IntelligentCheckout.Frontend", "IntelligentCheckout.Frontend.csproj", "{6421C620-958F-41A3-B2DE-B88A35B6BD4A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
+		Debug|x64 = Debug|x64
+		Debug|x86 = Debug|x86
 		Release|Any CPU = Release|Any CPU
-	EndGlobalSection
-	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{F4E924A5-440B-47D6-BBC0-DA5AFFCE9156}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{F4E924A5-440B-47D6-BBC0-DA5AFFCE9156}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{F4E924A5-440B-47D6-BBC0-DA5AFFCE9156}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{F4E924A5-440B-47D6-BBC0-DA5AFFCE9156}.Release|Any CPU.Build.0 = Release|Any CPU
-		{8CAACEB4-E945-4CE8-A1D1-9E18B5D4AE5C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{8CAACEB4-E945-4CE8-A1D1-9E18B5D4AE5C}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{8CAACEB4-E945-4CE8-A1D1-9E18B5D4AE5C}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{8CAACEB4-E945-4CE8-A1D1-9E18B5D4AE5C}.Release|Any CPU.Build.0 = Release|Any CPU
-		{07B44B8A-C19B-4D73-90C1-69D80149250E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{07B44B8A-C19B-4D73-90C1-69D80149250E}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{07B44B8A-C19B-4D73-90C1-69D80149250E}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{07B44B8A-C19B-4D73-90C1-69D80149250E}.Release|Any CPU.Build.0 = Release|Any CPU
+		Release|x64 = Release|x64
+		Release|x86 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
-	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {83417BD3-FE56-440B-AAE9-8CB46EFA9FFD}
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{6421C620-958F-41A3-B2DE-B88A35B6BD4A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6421C620-958F-41A3-B2DE-B88A35B6BD4A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6421C620-958F-41A3-B2DE-B88A35B6BD4A}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{6421C620-958F-41A3-B2DE-B88A35B6BD4A}.Debug|x64.Build.0 = Debug|Any CPU
+		{6421C620-958F-41A3-B2DE-B88A35B6BD4A}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{6421C620-958F-41A3-B2DE-B88A35B6BD4A}.Debug|x86.Build.0 = Debug|Any CPU
+		{6421C620-958F-41A3-B2DE-B88A35B6BD4A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6421C620-958F-41A3-B2DE-B88A35B6BD4A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6421C620-958F-41A3-B2DE-B88A35B6BD4A}.Release|x64.ActiveCfg = Release|Any CPU
+		{6421C620-958F-41A3-B2DE-B88A35B6BD4A}.Release|x64.Build.0 = Release|Any CPU
+		{6421C620-958F-41A3-B2DE-B88A35B6BD4A}.Release|x86.ActiveCfg = Release|Any CPU
+		{6421C620-958F-41A3-B2DE-B88A35B6BD4A}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
