@@ -1,0 +1,34 @@
+﻿@page "/carrinho"
+@inject HttpClient HttpClient
+
+<h3>Carrinho de compras</h3>
+
+@foreach (var produto in Produtos)
+{
+    <div class="row mb-3 mt-4">
+        <div class="card card-carrinho col-12">
+            <div class="row no-gutters">
+                <div class="col-md-2">
+                    <img src="@produto.Fotos.First()" class="card-img" alt="@produto.Nome">
+                </div>
+                <div class="col-md-10">
+                    <div class="card-body">
+                        <h5 class="card-title">@produto.Nome</h5>
+                        <h6 class="card-subtitle mb-2 text-muted">@produto.Preco.ToString("C2")</h6>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+@code {
+    private Models.Produto[] Produtos = new Models.Produto[0];
+
+    protected override async Task OnInitializedAsync()
+    {
+        var response = await HttpClient.GetJsonAsync<Models.ProdutoIEnumerableResposta>("https://intelligent-checkout-backend.azurewebsites.net/api/produtos");
+        Produtos = response.Data.ToArray();
+        await base.OnInitializedAsync();
+    }
+}

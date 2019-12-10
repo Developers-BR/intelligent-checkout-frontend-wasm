@@ -1,0 +1,34 @@
+﻿@page "/"
+@using IntelligentCheckout.Frontend.Components.Produtos
+@inject HttpClient HttpClient
+
+<h3>Promoções</h3>
+@if (Produtos == null)
+{
+    <div class="row">
+        <div class="col-sm-12">
+            <center>Carregando...</center>
+        </div>
+    </div>
+}
+else
+{
+    <div class="row mt-4">
+        @foreach (var prod in Produtos)
+        {
+            <div class="col-sm col-md-2 col-lg-3 mb-4">
+                <CardProduto Produto="@prod" />
+            </div>
+        }
+    </div>
+}
+
+@code {
+    private Models.Produto[] Produtos;
+
+    protected override async Task OnInitializedAsync()
+    {
+        var response = await HttpClient.GetJsonAsync<Models.ProdutoIEnumerableResposta>("https://intelligent-checkout-backend.azurewebsites.net/api/produtos");
+        Produtos = response.Data.OrderBy(p => p.Preco).Take(12).ToArray();
+    }
+}

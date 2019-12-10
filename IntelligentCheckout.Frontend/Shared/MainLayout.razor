@@ -1,0 +1,80 @@
+﻿@inherits LayoutComponentBase
+@inject SessionService SessionService
+@inject NavigationManager NavigationManager
+@using Microsoft.AspNetCore.WebUtilities
+@using BlazorBootstrap.Modal.UI
+@using IntelligentCheckout.Frontend.Components.Carrinho
+
+
+<div class="main">
+    <div class="top-row px-4">
+        <div class="col-lg-3 text-right">
+            <NavLink href="/">
+                <img src="/img/logo_developers.png" asp-append-version="true" style="height: 45px;" />
+            </NavLink>
+        </div>
+        <div class="col-lg-6">
+            <div class="input-group">
+                <input type="text" class="form-control" placeholder="Pesquisar produtos" id="input-search" @bind-value="Conteudo" @onkeyup="@PesquisarOnEnter">
+                <button type="button" id="nav-search-btn" @onclick="@Pesquisar"><i class="oi oi-magnifying-glass"></i></button>
+            </div>
+        </div>
+        <div class="col-lg-3 text-white">
+            <a href="www.google.com" class="mr-3"><i class="oi oi-person"></i> Nome Usuario</a>
+            <LinkCarrinho />
+        </div>
+    </div>
+    <div class="top-row px-4" style="z-index: 0;">
+        <div class="col-lg-6 offset-lg-3">
+            <a href="#" class="mr-3">Categorias</a>
+            <a href="#" class="mr-3">Produtos</a>
+            <a href="#" class="mr-3">Arquitetura</a>
+            <a href="#" class="mr-3">Links Úteis</a>
+        </div>
+        <div class="col-lg-3 text-white">
+            <a href="https://www.google.com"><i class="oi oi-thumb-up"></i> Conheça nossa comunidade!</a>
+        </div>
+    </div>
+
+    <div class="content px-4">
+        <div class="container mt-4">
+            @Body
+        </div>
+    </div>
+</div>
+
+<BootstrapModal />
+
+@code
+{
+    private string Conteudo { get; set; }
+
+    public void Pesquisar()
+    {
+        if (!string.IsNullOrWhiteSpace(Conteudo))
+        {
+            string url = $"/pesquisar?conteudo={Conteudo}";
+            NavigationManager.NavigateTo(url);
+        }
+    }
+
+    public void PesquisarOnEnter(KeyboardEventArgs e)
+    {
+        if (e.Key == "Enter")
+        {
+            Pesquisar();
+        }
+    }
+
+    protected override void OnInitialized()
+    {
+        var uri = NavigationManager.ToAbsoluteUri(NavigationManager.Uri);
+
+        if (QueryHelpers.ParseQuery(uri.Query).TryGetValue("conteudo", out var tempConteudo))
+        {
+            Conteudo = tempConteudo.ToString().Trim();
+        }
+
+        base.OnInitialized();
+    }
+}

@@ -1,0 +1,25 @@
+@using IntelligentCheckout.Frontend.Models
+@using BlazorBootstrap.Modal.Services
+@inject IModal Modal
+
+<a href="javascript: void(0)" @onclick="@DetalharProduto">
+    <div class="card card-produto">
+        <img src="@Produto.Fotos.FirstOrDefault()" class="card-img-top" alt="@Produto.Nome">
+        <div class="card-body">
+            <h5 class="card-title">@Produto.Nome</h5>
+            <p class="card-text"><small>@Produto.Descricao</small></p>
+        </div>
+        <div class="card-footer">
+            <small class="text-muted"><strong>Preço: </strong>@Produto.Preco.ToString("C2")</small>
+        </div>
+    </div>
+</a>
+@code {
+    [Parameter]
+    public Produto Produto { get; set; }
+
+    void DetalharProduto()
+    {
+        Modal.Show<ModalDetalheProduto>(Produto.Nome, ModalParameter.Get("Produto", Produto));
+    }
+}

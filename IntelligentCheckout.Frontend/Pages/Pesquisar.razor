@@ -1,0 +1,69 @@
+﻿@page "/pesquisar"
+@inject HttpClient HttpClient
+@inject NavigationManager NavigationManager
+@implements IDisposable
+@using Microsoft.AspNetCore.WebUtilities
+@using IntelligentCheckout.Frontend.Components.Produtos
+
+@if (Resultado == null)
+{
+    <h3>Pesquisando...</h3>
+}
+else
+{
+    <h3>Resultados da pesquisa por: @Conteudo</h3>
+    <div class="row mt-4">
+        @foreach (var prod in Resultado)
+        {
+            <div class="col-sm col-md-2 col-lg-3 mb-4">
+                <CardProduto Produto="@prod" />
+            </div>
+        }
+    </div>
+}
+
+@code {
+
+    string Conteudo;
+
+    Models.Produto[] Resultado;
+
+    protected override async Task OnInitializedAsync()
+    {
+        NavigationManager.LocationChanged += LocationChanged;
+
+        await ExecutarPesquisa();
+
+        await base.OnInitializedAsync();
+    }
+
+    void LocationChanged(object sender, LocationChangedEventArgs e)
+    {
+        if (!e.IsNavigationIntercepted)
+        {
+            System.Diagnostics.Debug.WriteLine("Foi!!");
+            ExecutarPesquisa();
+        }
+    }
+
+    public void Dispose()
+    {
+        NavigationManager.LocationChanged -= LocationChanged;
+    }
+
+    async Task ExecutarPesquisa()
+    {
+        var uri = NavigationManager.ToAbsoluteUri(NavigationManager.Uri);
+
+        if (QueryHelpers.ParseQuery(uri.Query).TryGetValue("conteudo", out var tempConteudo))
+        {
+            Conteudo = tempConteudo.ToString().Trim();
+        }
+
+        string url = $"https://intelligent-checkout-backend.azurewebsites.net/api/produtos/buscar?termo={Conteudo}";
+        System.Diagnostics.Debug.WriteLine(url);
+        Models.ProdutoIEnumerableResposta response = await HttpClient.GetJsonAsync<Models.ProdutoIEnumerableResposta>(url);
+        Resultado = response.Data.OrderBy(p => p.Nome).ToArray();
+        StateHasChanged();
+    }
+}

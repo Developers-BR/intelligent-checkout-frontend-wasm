@@ -1,0 +1,19 @@
+﻿@inject HttpClient HttpClient
+
+    <NavLink href="/carrinho">
+        <i class="oi oi-cart"></i><span class="ml-1">@Carrinho.QuantidadeDeItens @(Carrinho.QuantidadeDeItens == 1 ? "item" : "itens")</span>
+    </NavLink>
+
+@code {
+    private Models.Carrinho Carrinho = new Models.Carrinho();
+
+    [Parameter]
+    public Guid SessionId { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        var response = await HttpClient.GetJsonAsync<Models.CarrinhoResposta>($"https://intelligent-checkout-backend.azurewebsites.net/api/carrinho/{SessionId}");
+        Carrinho = response?.Data ?? new Models.Carrinho();
+        await base.OnInitializedAsync();
+    }
+}
