@@ -1,8 +1,7 @@
 ﻿@inherits LayoutComponentBase
-@inject SessionService SessionService
 @inject NavigationManager NavigationManager
+@inject IBootstrapCSS BootstrapCSS
 @using Microsoft.AspNetCore.WebUtilities
-@using BlazorBootstrap.Modal.UI
 @using IntelligentCheckout.Frontend.Components.Carrinho
 
 
@@ -20,22 +19,9 @@
             </div>
         </div>
         <div class="col-lg-3 text-white">
-            <a href="www.google.com" class="mr-3"><i class="oi oi-person"></i> Nome Usuario</a>
             <LinkCarrinho />
         </div>
     </div>
-    <div class="top-row px-4" style="z-index: 0;">
-        <div class="col-lg-6 offset-lg-3">
-            <a href="#" class="mr-3">Categorias</a>
-            <a href="#" class="mr-3">Produtos</a>
-            <a href="#" class="mr-3">Arquitetura</a>
-            <a href="#" class="mr-3">Links Úteis</a>
-        </div>
-        <div class="col-lg-3 text-white">
-            <a href="https://www.google.com"><i class="oi oi-thumb-up"></i> Conheça nossa comunidade!</a>
-        </div>
-    </div>
-
     <div class="content px-4">
         <div class="container mt-4">
             @Body
@@ -43,11 +29,10 @@
     </div>
 </div>
 
-<BootstrapModal />
-
 @code
 {
     private string Conteudo { get; set; }
+    private bool isServerSide = false;
 
     public void Pesquisar()
     {
@@ -76,5 +61,26 @@
         }
 
         base.OnInitialized();
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            await BootstrapCSS.SetBootstrapCSS("4.3.1");
+        }
+        catch (Exception)
+        {
+            isServerSide = true;
+        }
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstrun)
+    {
+        System.Diagnostics.Debug.WriteLine("TESTE");
+        if (isServerSide && firstrun)
+        {
+            await BootstrapCSS.SetBootstrapCSS("4.3.1");
+        }
     }
 }

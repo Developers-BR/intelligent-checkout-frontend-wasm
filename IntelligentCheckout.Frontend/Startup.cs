@@ -1,5 +1,5 @@
-using BlazorBootstrap.Modal;
 using Blazored.LocalStorage;
+using BlazorStrap;
 using IntelligentCheckout.Frontend.Services;
 using Microsoft.AspNetCore.Components.Builder;
 using Microsoft.Extensions.DependencyInjection;
@@ -11,8 +11,8 @@ namespace IntelligentCheckout.Frontend
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddBlazoredLocalStorage();
-            services.AddBootstrapModal();
-            services.AddSingleton<SessionService>();
+            services.AddBootstrapCSS();
+            services.AddSingleton<CartService>();
         }
 
         public void Configure(IComponentsApplicationBuilder app)

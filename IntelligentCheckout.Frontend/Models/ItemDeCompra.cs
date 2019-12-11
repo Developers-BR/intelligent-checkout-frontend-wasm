@@ -7,7 +7,7 @@ namespace IntelligentCheckout.Frontend.Models
 {
     public class ItemDeCompra
     {
-        public Guid IdProduto { get; set; }
+        public Produto Produto { get; set; }
         public int Quantidade { get; set; }
     }
 }

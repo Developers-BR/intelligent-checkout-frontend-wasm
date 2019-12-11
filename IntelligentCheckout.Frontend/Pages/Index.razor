@@ -1,6 +1,7 @@
 ﻿@page "/"
 @using IntelligentCheckout.Frontend.Components.Produtos
 @inject HttpClient HttpClient
+@inject CartService CartService
 
 <h3>Promoções</h3>
 @if (Produtos == null)
@@ -17,18 +18,72 @@ else
         @foreach (var prod in Produtos)
         {
             <div class="col-sm col-md-2 col-lg-3 mb-4">
-                <CardProduto Produto="@prod" />
+                <CardProduto Produto="@prod" OnClick="@DetalharProduto" />
             </div>
         }
     </div>
 }
 
+<BSModal @ref="DetalheProduto" IsCentered="true">
+    <BSModalHeader OnClick="@FecharModal">@Detalhe.Nome</BSModalHeader>
+    <BSModalBody>
+        <img src="@Detalhe.Fotos.FirstOrDefault()" style="width: 100%;"/>
+        <p>@Detalhe.Descricao</p>
+    </BSModalBody>
+    <BSModalFooter>
+        <div class="col-3 my-auto">
+            <strong>@Detalhe.Preco.ToString("C2")</strong>
+        </div>
+        <div class="col text-right my-auto d-block" style="white-space: nowrap;">
+            <label for="inputQtd">Quantidade</label>
+            <input name="inputQtd" type="number" min="1" @bind-value="Quantidade" style="width: 50px;" />
+            <BSButton Color="Color.Primary" OnClick="@AdicionarAoCarrinho">Adicionar ao Carrinho</BSButton>
+        </div>
+    </BSModalFooter>
+</BSModal>
+
 @code {
     private Models.Produto[] Produtos;
+
+    private Models.Produto Detalhe = new Models.Produto();
+
+    BSModal DetalheProduto;
 
     protected override async Task OnInitializedAsync()
     {
         var response = await HttpClient.GetJsonAsync<Models.ProdutoIEnumerableResposta>("https://intelligent-checkout-backend.azurewebsites.net/api/produtos");
         Produtos = response.Data.OrderBy(p => p.Preco).Take(12).ToArray();
+    }
+
+    void FecharModal()
+    {
+        Quantidade = 1;
+        DetalheProduto.Style = "";
+        DetalheProduto.Hide();
+    }
+
+    void AbrirModal()
+    {
+        DetalheProduto.Style = "display: block; opacity: 1;";
+        DetalheProduto.Show();
+    }
+
+    void DetalharProduto(Models.Produto produto)
+    {
+        Detalhe = produto;
+        AbrirModal();
+    }
+
+    int Quantidade = 1;
+
+    public async Task AdicionarAoCarrinho()
+    {
+        await CartService.AdicionarItem(new Models.ItemDeCompra
+        {
+            Produto = Detalhe,
+            Quantidade = Quantidade
+        });
+        Quantidade = 1;
+        FecharModal();
     }
 }

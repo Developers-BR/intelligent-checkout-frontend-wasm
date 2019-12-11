@@ -1,6 +1,7 @@
 ﻿@page "/pesquisar"
 @inject HttpClient HttpClient
 @inject NavigationManager NavigationManager
+@inject CartService CartService
 @implements IDisposable
 @using Microsoft.AspNetCore.WebUtilities
 @using IntelligentCheckout.Frontend.Components.Produtos
@@ -16,17 +17,39 @@ else
         @foreach (var prod in Resultado)
         {
             <div class="col-sm col-md-2 col-lg-3 mb-4">
-                <CardProduto Produto="@prod" />
+                <CardProduto Produto="@prod" OnClick="@DetalharProduto" />
             </div>
         }
     </div>
 }
+
+<BSModal @ref="DetalheProduto" IsCentered="true">
+    <BSModalHeader OnClick="@FecharModal">@Detalhe.Nome</BSModalHeader>
+    <BSModalBody>
+        <img src="@Detalhe.Fotos.FirstOrDefault()" style="width: 100%;" />
+        <p>@Detalhe.Descricao</p>
+    </BSModalBody>
+    <BSModalFooter>
+        <div class="col-3 my-auto">
+            <strong>@Detalhe.Preco.ToString("C2")</strong>
+        </div>
+        <div class="col text-right my-auto d-block" style="white-space: nowrap;">
+            <label for="inputQtd">Quantidade</label>
+            <input name="inputQtd" type="number" min="1" @bind-value="Quantidade" style="width: 50px;" />
+            <BSButton Color="Color.Primary" OnClick="@AdicionarAoCarrinho">Adicionar ao Carrinho</BSButton>
+        </div>
+    </BSModalFooter>
+</BSModal>
 
 @code {
 
     string Conteudo;
 
     Models.Produto[] Resultado;
+
+    private Models.Produto Detalhe = new Models.Produto();
+
+    BSModal DetalheProduto;
 
     protected override async Task OnInitializedAsync()
     {
@@ -41,7 +64,6 @@ else
     {
         if (!e.IsNavigationIntercepted)
         {
-            System.Diagnostics.Debug.WriteLine("Foi!!");
             ExecutarPesquisa();
         }
     }
@@ -66,4 +88,37 @@ else
         Resultado = response.Data.OrderBy(p => p.Nome).ToArray();
         StateHasChanged();
     }
+
+    void FecharModal()
+    {
+        Quantidade = 1;
+        DetalheProduto.Style = "";
+        DetalheProduto.Hide();
+    }
+
+    void AbrirModal()
+    {
+        DetalheProduto.Style = "display: block; opacity: 1;";
+        DetalheProduto.Show();
+    }
+
+    void DetalharProduto(Models.Produto produto)
+    {
+        Detalhe = produto;
+        AbrirModal();
+    }
+
+    int Quantidade = 1;
+
+    public async Task AdicionarAoCarrinho()
+    {
+        await CartService.AdicionarItem(new Models.ItemDeCompra
+        {
+            Produto = Detalhe,
+            Quantidade = Quantidade
+        });
+        Quantidade = 1;
+        FecharModal();
+    }
+
 }

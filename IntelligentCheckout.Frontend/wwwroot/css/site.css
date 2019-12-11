@@ -80,12 +80,11 @@ a {
     font-size: 14px;
 }
 
-.modal-dialog {
+/*.modal-dialog {
     margin: 0 auto 0 auto;
-    top: 30%;
     -ms-transform: translateY(-50%);
     transform: translateY(-50%);
-}
+}*/
 
 .carousel-control-next-icon,
 .carousel-control-prev-icon {

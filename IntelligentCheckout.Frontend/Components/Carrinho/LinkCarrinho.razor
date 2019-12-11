@@ -1,19 +1,37 @@
 ﻿@inject HttpClient HttpClient
+@inject CartService CartService
+@implements IDisposable
 
-    <NavLink href="/carrinho">
-        <i class="oi oi-cart"></i><span class="ml-1">@Carrinho.QuantidadeDeItens @(Carrinho.QuantidadeDeItens == 1 ? "item" : "itens")</span>
-    </NavLink>
+<NavLink href="/carrinho">
+    <i class="oi oi-cart"></i><span class="ml-3">@Carrinho.QuantidadeDeItens @(Carrinho.QuantidadeDeItens == 1 ? "item" : "itens")</span>
+</NavLink>
 
 @code {
     private Models.Carrinho Carrinho = new Models.Carrinho();
 
-    [Parameter]
-    public Guid SessionId { get; set; }
-
     protected override async Task OnInitializedAsync()
     {
-        var response = await HttpClient.GetJsonAsync<Models.CarrinhoResposta>($"https://intelligent-checkout-backend.azurewebsites.net/api/carrinho/{SessionId}");
-        Carrinho = response?.Data ?? new Models.Carrinho();
-        await base.OnInitializedAsync();
+        await AtualizarCarrinho();
+    }
+
+    async Task AtualizarCarrinho()
+    {
+        Carrinho = await CartService.GetCarrinho();
+        StateHasChanged();
+    }
+
+    void CartChanged()
+    {
+        AtualizarCarrinho();
+    }
+
+    protected override void OnInitialized()
+    {
+        CartService.OnChange += CartChanged;
+    }
+
+    public void Dispose()
+    {
+        CartService.OnChange -= CartChanged;
     }
 }

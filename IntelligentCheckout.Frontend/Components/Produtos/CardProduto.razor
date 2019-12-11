@@ -1,8 +1,7 @@
 @using IntelligentCheckout.Frontend.Models
-@using BlazorBootstrap.Modal.Services
-@inject IModal Modal
+@inject CartService CartService
 
-<a href="javascript: void(0)" @onclick="@DetalharProduto">
+<a href="javascript: void(0)" @onclick="@(async () => await OnClick.InvokeAsync(Produto))">
     <div class="card card-produto">
         <img src="@Produto.Fotos.FirstOrDefault()" class="card-img-top" alt="@Produto.Nome">
         <div class="card-body">
@@ -14,12 +13,13 @@
         </div>
     </div>
 </a>
+
+
+
 @code {
     [Parameter]
     public Produto Produto { get; set; }
 
-    void DetalharProduto()
-    {
-        Modal.Show<ModalDetalheProduto>(Produto.Nome, ModalParameter.Get("Produto", Produto));
-    }
+    [Parameter]
+    public EventCallback<Produto> OnClick { get; set; }
 }

@@ -1,21 +1,32 @@
 ﻿@page "/carrinho"
-@inject HttpClient HttpClient
+@inject CartService CartService
 
-<h3>Carrinho de compras</h3>
+<div class="row">
+    <div class="col-md-10 col-sm-12 my-auto"><h3>Carrinho de compras</h3></div>
+    <div class="col-md-2 col-sm-12 my-auto text-center" style="white-space: nowrap;">
+        <button type="button" class="btn btn-danger" @onclick="@LimparCarrinho">Limpar</button>
+        <button type="button" class="btn btn-primary">Checkout</button>
+    </div>
+</div>
 
-@foreach (var produto in Produtos)
+@foreach (var item in _carrinho.ItensDeCompra)
 {
     <div class="row mb-3 mt-4">
         <div class="card card-carrinho col-12">
             <div class="row no-gutters">
                 <div class="col-md-2">
-                    <img src="@produto.Fotos.First()" class="card-img" alt="@produto.Nome">
+                    <img src="@item.Produto.Fotos.First()" class="card-img" alt="@item.Produto.Nome">
                 </div>
-                <div class="col-md-10">
+                <div class="col-md-7">
                     <div class="card-body">
-                        <h5 class="card-title">@produto.Nome</h5>
-                        <h6 class="card-subtitle mb-2 text-muted">@produto.Preco.ToString("C2")</h6>
+                        <h5 class="card-title">@item.Produto.Nome</h5>
+                        <h6 class="card-subtitle mb-2 text-muted"><strong>Preço Unitário: </strong>@item.Produto.Preco.ToString("C2")</h6>
+                        <h6 class="card-subtitle mb-2 text-muted"><strong>Quantidade: </strong>@item.Quantidade</h6>
+                        <h6 class="card-subtitle mb-2 text-muted"><strong>Total: </strong>@((item.Quantidade * item.Produto.Preco).ToString("C2"))</h6>
                     </div>
+                </div>
+                <div class="col-md-3 text-right mt-auto mb-2">
+                    <button type="button" class="btn btn-outline-danger" @onclick="@(async () => await RemoverItem(item))">Remover</button>
                 </div>
             </div>
         </div>
@@ -23,12 +34,24 @@
 }
 
 @code {
-    private Models.Produto[] Produtos = new Models.Produto[0];
+    private Models.Carrinho _carrinho = new Models.Carrinho();
 
     protected override async Task OnInitializedAsync()
     {
-        var response = await HttpClient.GetJsonAsync<Models.ProdutoIEnumerableResposta>("https://intelligent-checkout-backend.azurewebsites.net/api/produtos");
-        Produtos = response.Data.ToArray();
+        _carrinho = await CartService.GetCarrinho();
+        StateHasChanged();
         await base.OnInitializedAsync();
+    }
+
+    async Task LimparCarrinho()
+    {
+        await CartService.LimparCarrinho();
+        _carrinho = await CartService.GetCarrinho();
+    }
+
+    async Task RemoverItem(Models.ItemDeCompra item)
+    {
+        await CartService.RemoverItem(item);
+        _carrinho = await CartService.GetCarrinho();
     }
 }

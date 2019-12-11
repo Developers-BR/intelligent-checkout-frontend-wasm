@@ -6,9 +6,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="BlazorBootstrap.Modal" Version="1.0.3" />
     <PackageReference Include="Blazored.LocalStorage" Version="2.1.1" />
-    <PackageReference Include="BlazorStrap" Version="1.1.0-preview1-03" />
+    <PackageReference Include="BlazorStrap" Version="1.1.0-preview1-02" />
     <PackageReference Include="Microsoft.AspNetCore.Blazor" Version="3.1.0-preview4.19579.2" />
     <PackageReference Include="Microsoft.AspNetCore.Blazor.Build" Version="3.1.0-preview4.19579.2" PrivateAssets="all" />
     <PackageReference Include="Microsoft.AspNetCore.Blazor.HttpClient" Version="3.1.0-preview4.19579.2" />
