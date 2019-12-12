@@ -5,8 +5,10 @@ using System.Threading.Tasks;
 
 namespace IntelligentCheckout.Frontend.Models
 {
-    public class CadastrarPessoaResposta : Resposta
+    public class PessoaLogin
     {
-        public PessoaLogin Data { get; set; }
+        public Guid Id { get; set; }
+        public string Nome { get; set; }
+        public FotoDoRosto[] FotosDoRosto { get; set; }
     }
 }

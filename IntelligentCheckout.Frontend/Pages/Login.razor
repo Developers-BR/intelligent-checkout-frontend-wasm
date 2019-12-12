@@ -101,7 +101,7 @@
     {
         string url = "https://intelligent-checkout-backend.azurewebsites.net/api/pessoas/obter-pelo-rosto";
         Models.ObterPessoaPeloRosto data = new Models.ObterPessoaPeloRosto() { FotoDoRostoEmBase64 = Picture };
-        Models.CadastrarPessoaResposta resposta = await HttpClient.PostJsonAsync<Models.CadastrarPessoaResposta>(url, data);
+        Models.RespostaLogin resposta = await HttpClient.PostJsonAsync<Models.RespostaLogin>(url, data);
         if (resposta != null && resposta.Data != null)
         {
             PessoaService.AtualizarPessoa(resposta.Data);

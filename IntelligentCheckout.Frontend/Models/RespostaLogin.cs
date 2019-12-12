@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace IntelligentCheckout.Frontend.Models
 {
-    public class CadastrarPessoaResposta : Resposta
+    public class RespostaLogin : Resposta
     {
         public PessoaLogin Data { get; set; }
     }

@@ -42,7 +42,7 @@
 	};
 
 	window.exportPicture = function () {
-		return canvas.toDataURL("image/jpg");
+		return canvas.toDataURL("image/jpeg", 0.5);
 	};
 
 	window.stopPicture = function () {
@@ -50,5 +50,7 @@
 		if (video.srcObject && video.srcObject.getTracks()) {
 			video.srcObject.getTracks().forEach(function (track) { track.stop(); });
 		}
+		video.srcObject = null;
+		video.src = null;
 	};
 }

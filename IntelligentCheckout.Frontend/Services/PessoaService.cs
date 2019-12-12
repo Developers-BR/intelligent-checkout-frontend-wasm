@@ -20,9 +20,14 @@ namespace IntelligentCheckout.Frontend.Services
             return _pessoa;
         }
 
-        public void AtualizarPessoa(Pessoa pessoa)
+        public void AtualizarPessoa(PessoaLogin login)
         {
-            _pessoa = pessoa;
+            _pessoa = new Pessoa()
+            {
+                Id = login.Id,
+                Nome = login.Nome,
+                FotosDoRosto = login.FotosDoRosto.Select(f => f.FotoEmBase64).ToArray()
+            };
             NotifyStateChanged();
         }
     }
