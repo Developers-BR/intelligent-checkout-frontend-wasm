@@ -36,10 +36,10 @@
 
 	window.snapPicture = function () {
 		var canvas = document.createElement('canvas');
-		canvas.width = 1024;
-		canvas.height = 768;
+		canvas.width = 800;
+		canvas.height = 600;
 		var context = canvas.getContext('2d');
-		context.drawImage(video, 0, 0, 1024, 768);
+		context.drawImage(video, 0, 0, 800, 600);
 	};
 
 	window.exportPicture = function () {
@@ -47,7 +47,7 @@
 		canvas.width = 800;
 		canvas.height = 600;
 		var context = canvas.getContext('2d');
-		context.drawImage(video, 0, 0, 1024, 768);
+		context.drawImage(video, 0, 0, 800, 600);
 		return canvas.toDataURL("image/jpeg", 0.5);
 	};
 

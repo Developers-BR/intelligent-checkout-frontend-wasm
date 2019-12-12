@@ -35,5 +35,11 @@ namespace IntelligentCheckout.Frontend.Services
             };
             NotifyStateChanged();
         }
+
+        public void Logout()
+        {
+            _pessoa = null;
+            NotifyStateChanged();
+        }
     }
 }
