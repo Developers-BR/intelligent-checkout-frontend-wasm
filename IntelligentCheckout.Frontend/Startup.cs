@@ -13,6 +13,7 @@ namespace IntelligentCheckout.Frontend
             services.AddBlazoredLocalStorage();
             services.AddBootstrapCSS();
             services.AddSingleton<CartService>();
+            services.AddSingleton<PessoaService>();
         }
 
         public void Configure(IComponentsApplicationBuilder app)

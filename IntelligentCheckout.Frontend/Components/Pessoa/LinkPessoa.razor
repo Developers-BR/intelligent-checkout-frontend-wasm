@@ -1,0 +1,41 @@
+﻿@inject PessoaService PessoaService
+@implements IDisposable
+
+@if (Pessoa == null)
+{
+    <NavLink href="/login">
+        <i class="oi oi-people ml-5"></i><span class="ml-2">Login</span>
+    </NavLink>
+}
+else
+{
+    <NavLink href="/detalhe-pessoa">
+        <i class="oi oi-person ml-5"></i><span class="ml-2">@Pessoa.Nome</span>
+    </NavLink>
+}
+
+@code {
+    private Models.Pessoa Pessoa;
+
+    void ObterPessoa()
+    {
+        Pessoa = PessoaService.ObterPessoaAtual();
+        StateHasChanged();
+    }
+
+    void PessoaMudou()
+    {
+        ObterPessoa();
+    }
+
+    protected override void OnInitialized()
+    {
+        ObterPessoa();
+        PessoaService.OnChange += ObterPessoa;
+    }
+
+    public void Dispose()
+    {
+        PessoaService.OnChange -= ObterPessoa;
+    }
+}

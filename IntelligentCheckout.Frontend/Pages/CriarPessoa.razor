@@ -1,0 +1,110 @@
+﻿@page "/criar-pessoa"
+@inject HttpClient HttpClient
+@inject PessoaService PessoaService
+@inject IJSRuntime JSRuntime
+@inject NavigationManager NavigationManager
+
+<h3>Cadastre-se</h3>
+<hr />
+<div class="row">
+    <div class="col-sm-12 col-md-6 col-lg-6">
+        <label for="input-name">Nome</label><br />
+        <input type="text" id="input-name" @bind-value="Nome" style="width: 100%" />
+    </div>
+</div>
+<br />
+<br />
+<h4>Fotos</h4>
+<p>São necessárias 5 fotos para seu cadastro</p>
+<div class="row">
+    @if (Pictures != null)
+    {
+        <div class="col text-center"><img src="@Pictures[0]" @onclick="@(async () => await GetPic(0))" width="128" height="96" style="background: #666; cursor: pointer;" /></div>
+        <div class="col text-center"><img src="@Pictures[1]" @onclick="@(async () => await GetPic(1))" width="128" height="96" style="background: #666; cursor: pointer;" /></div>
+        <div class="col text-center"><img src="@Pictures[2]" @onclick="@(async () => await GetPic(2))" width="128" height="96" style="background: #666; cursor: pointer;" /></div>
+        <div class="col text-center"><img src="@Pictures[3]" @onclick="@(async () => await GetPic(3))" width="128" height="96" style="background: #666; cursor: pointer;" /></div>
+        <div class="col text-center"><img src="@Pictures[4]" @onclick="@(async () => await GetPic(4))" width="128" height="96" style="background: #666; cursor: pointer;" /></div>
+    }
+</div>
+<hr />
+<div class="row">
+    <div class="col-3 offset-9 text-right">
+        <button type="button" class="btn btn-primary" @onclick="@Cadastrar">Cadastrar pessoa</button>
+    </div>
+</div>
+
+<BSModal @ref="ObterFoto" IsCentered="true">
+    <BSModalHeader OnClick="@(async () => await FecharModal())">Capturar imagem</BSModalHeader>
+    <BSModalBody>
+        <video id="video" width="640" height="480" autoplay style="width: 100%;"></video>
+    </BSModalBody>
+    <BSModalFooter>
+        <div class="col text-right my-auto d-block" style="white-space: nowrap;">
+            <BSButton Color="Color.Light" OnClick="@(async () => await FecharModal())">Cancelar</BSButton>
+            <BSButton Color="Color.Primary" OnClick="@SnapPic">Capturar</BSButton>
+        </div>
+    </BSModalFooter>
+</BSModal>
+
+@code
+{
+    string[] Pictures = Enumerable.Repeat("/img/img-add.jpg", 5).ToArray();
+
+    int Index = 0;
+
+    BSModal ObterFoto;
+
+    string Nome;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            await JSRuntime.InvokeVoidAsync("initPicture");
+        }
+        await base.OnAfterRenderAsync(firstRender);
+    }
+
+    async Task FecharModal()
+    {
+        await JSRuntime.InvokeVoidAsync("stopPicture");
+        Index = 0;
+        ObterFoto.Style = "";
+        ObterFoto.Hide();
+    }
+
+    async Task AbrirModal()
+    {
+        ObterFoto.Style = "display: block; opacity: 1;";
+        ObterFoto.Show();
+        await JSRuntime.InvokeVoidAsync("startPicture");
+    }
+
+    async Task GetPic(int index)
+    {
+        Index = index;
+        await AbrirModal();
+    }
+
+    async Task SnapPic()
+    {
+        await JSRuntime.InvokeVoidAsync("snapPicture");
+        var result = await JSRuntime.InvokeAsync<string>("exportPicture");
+        await JSRuntime.InvokeVoidAsync("stopPicture");
+        Pictures[Index] = result;
+        await FecharModal();
+    }
+
+    async Task Cadastrar()
+    {
+        Models.CriarPessoa data = new Models.CriarPessoa
+        {
+            Nome = Nome,
+            FotosDoRostoEmBase64 = Pictures
+        };
+        string url = "https://intelligent-checkout-backend.azurewebsites.net/api/pessoas";
+        Models.CadastrarPessoaResposta resposta = await HttpClient.PostJsonAsync<Models.CadastrarPessoaResposta>(url, data);
+        PessoaService.AtualizarPessoa(resposta.Data);
+        NavigationManager.NavigateTo("/");
+    }
+}
