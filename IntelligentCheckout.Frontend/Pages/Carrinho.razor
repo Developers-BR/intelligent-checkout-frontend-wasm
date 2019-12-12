@@ -1,40 +1,71 @@
 ﻿@page "/carrinho"
 @inject CartService CartService
+@inject PessoaService PessoaService
+@inject NavigationManager NavigationManager
+@inject IJSRuntime JSRuntime
+@inject HttpClient HttpClient
+
 
 <div class="row">
     <div class="col-md-10 col-sm-12 my-auto"><h3>Carrinho de compras</h3></div>
     <div class="col-md-2 col-sm-12 my-auto text-center" style="white-space: nowrap;">
         <button type="button" class="btn btn-danger" @onclick="@LimparCarrinho">Limpar</button>
-        <button type="button" class="btn btn-primary">Checkout</button>
+        <button type="button" class="btn btn-primary" @onclick="@ModalCheckout">Checkout</button>
     </div>
 </div>
 
-@foreach (var item in _carrinho.ItensDeCompra)
+@if (_carrinho == null || _carrinho.ItensDeCompra == null || _carrinho.ItensDeCompra.Count == 0)
 {
     <div class="row mb-3 mt-4">
-        <div class="card card-carrinho col-12">
-            <div class="row no-gutters">
-                <div class="col-md-2">
-                    <img src="@item.Produto.Fotos.First()" class="card-img" alt="@item.Produto.Nome">
-                </div>
-                <div class="col-md-7">
-                    <div class="card-body">
-                        <h5 class="card-title">@item.Produto.Nome</h5>
-                        <h6 class="card-subtitle mb-2 text-muted"><strong>Preço Unitário: </strong>@item.Produto.Preco.ToString("C2")</h6>
-                        <h6 class="card-subtitle mb-2 text-muted"><strong>Quantidade: </strong>@item.Quantidade</h6>
-                        <h6 class="card-subtitle mb-2 text-muted"><strong>Total: </strong>@((item.Quantidade * item.Produto.Preco).ToString("C2"))</h6>
-                    </div>
-                </div>
-                <div class="col-md-3 text-right mt-auto mb-2">
-                    <button type="button" class="btn btn-outline-danger" @onclick="@(async () => await RemoverItem(item))">Remover</button>
-                </div>
-            </div>
+        <div class="col-12">
+            <h4>Carregando...</h4>
         </div>
     </div>
 }
+else
+{
+    @foreach (var item in _carrinho.ItensDeCompra)
+    {
+        <div class="row mb-3 mt-4">
+            <div class="card card-carrinho col-12">
+                <div class="row no-gutters">
+                    <div class="col-md-2">
+                        <img src="@item.Produto.Fotos.First()" class="card-img" alt="@item.Produto.Nome">
+                    </div>
+                    <div class="col-md-7">
+                        <div class="card-body">
+                            <h5 class="card-title">@item.Produto.Nome</h5>
+                            <h6 class="card-subtitle mb-2 text-muted"><strong>Preço Unitário: </strong>@item.Produto.Preco.ToString("C2")</h6>
+                            <h6 class="card-subtitle mb-2 text-muted"><strong>Quantidade: </strong>@item.Quantidade</h6>
+                            <h6 class="card-subtitle mb-2 text-muted"><strong>Total: </strong>@((item.Quantidade * item.Produto.Preco).ToString("C2"))</h6>
+                        </div>
+                    </div>
+                    <div class="col-md-3 text-right mt-auto mb-2">
+                        <button type="button" class="btn btn-outline-danger" @onclick="@(async () => await RemoverItem(item))">Remover</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+}
+
+<BSModal @ref="ObterFoto" IsCentered="true">
+    <BSModalHeader OnClick="@(async () => await FecharModal())">Capturar imagem</BSModalHeader>
+    <BSModalBody>
+        <video id="video" width="640" height="480" autoplay style="width: 100%;"></video>
+    </BSModalBody>
+    <BSModalFooter>
+        <div class="col text-right my-auto d-block" style="white-space: nowrap;">
+            <BSButton Color="Color.Light" OnClick="@(async () => await FecharModal())">Cancelar</BSButton>
+            <BSButton Color="Color.Primary" OnClick="@SnapPic">Capturar</BSButton>
+        </div>
+    </BSModalFooter>
+</BSModal>
 
 @code {
     private Models.Carrinho _carrinho = new Models.Carrinho();
+
+    BSModal ObterFoto;
 
     protected override async Task OnInitializedAsync()
     {
@@ -53,5 +84,46 @@
     {
         await CartService.RemoverItem(item);
         _carrinho = await CartService.GetCarrinho();
+    }
+
+    async Task ModalCheckout()
+    {
+        await AbrirModal();
+    }
+
+    async Task FecharModal()
+    {
+        await JSRuntime.InvokeVoidAsync("stopPicture");
+        ObterFoto.Style = "";
+        ObterFoto.Hide();
+    }
+
+    async Task AbrirModal()
+    {
+        await JSRuntime.InvokeVoidAsync("initPicture");
+        ObterFoto.Style = "display: block; opacity: 1;";
+        ObterFoto.Show();
+        await JSRuntime.InvokeVoidAsync("startPicture");
+    }
+
+    async Task SnapPic()
+    {
+        await JSRuntime.InvokeVoidAsync("snapPicture");
+        var result = await JSRuntime.InvokeAsync<string>("exportPicture");
+        await JSRuntime.InvokeVoidAsync("stopPicture");
+
+        Models.FinalizarCompra data = new Models.FinalizarCompra()
+        {
+            IdSessao = await CartService.GetCurrentSessionIdOrNew(),
+            FotoDoRostoEmBase64 = result
+        };
+
+        string url = "https://intelligent-checkout-backend.azurewebsites.net/api/compras/finalizar";
+        Models.RespostaFinalizarCompra response = await HttpClient.PostJsonAsync<Models.RespostaFinalizarCompra>(url, data);
+
+        PessoaService.AtualizarPessoa(response.Data.Pessoa);
+        await CartService.LimparCarrinho();
+
+        NavigationManager.NavigateTo("/detalhe-pessoa");
     }
 }

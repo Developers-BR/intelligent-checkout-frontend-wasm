@@ -1,0 +1,49 @@
+﻿@page "/detalhe-pessoa"
+@inject HttpClient HttpClient
+@inject PessoaService PessoaService
+
+<h3>@PessoaService.ObterPessoaAtual()Nome.</h3>
+<h4>Compras finalizadas</h4>
+
+@if (Compras == null || Compras.Data == null)
+{
+    <div class="row">
+        <div class="col-12">
+            <h4>Carregando...</h4>
+        </div>
+    </div>
+}
+else
+{
+    @foreach (var compra in Compras.Data)
+    {
+        <div class="row mb-3 mt-4">
+            <div class="card card-carrinho col-12">
+                <div class="row no-gutters">
+                    <div class="col-sm-12">
+                        <div class="card-body">
+                            <h5 class="card-title">@compra.Id</h5>
+                            <h6 class="card-subtitle mb-2 text-muted"><strong>Data / Hora: </strong>@compra.DataHora.Value.ToString("dd/MM/yyyy HH:mm")</h6>
+                            <h6 class="card-subtitle mb-2 text-muted"><strong>Quantidade: </strong>@compra.Carrinho.QuantidadeDeItens</h6>
+                            <h6 class="card-subtitle mb-2 text-muted"><strong>Total: </strong>@(compra.Carrinho.ValorTotalDoCarrinho.ToString("C2"))</h6>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+}
+
+
+@code {
+    Models.RespostaListarCompras Compras;
+
+    protected override async Task OnInitializedAsync()
+    {
+        string idPessoa = PessoaService.ObterPessoaAtual()?.Id.ToString();
+        string url = $"https://intelligent-checkout-backend.azurewebsites.net/api/compras/pessoa/{idPessoa}";
+        Compras = await HttpClient.GetJsonAsync<Models.RespostaListarCompras>(url);
+        StateHasChanged();
+        await base.OnInitializedAsync();
+    }
+}

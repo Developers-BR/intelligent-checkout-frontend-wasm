@@ -22,6 +22,11 @@ namespace IntelligentCheckout.Frontend.Services
 
         public void AtualizarPessoa(PessoaLogin login)
         {
+            if (login.FotosDoRosto == null)
+            {
+                login.FotosDoRosto = new FotoDoRosto[0];
+            }
+
             _pessoa = new Pessoa()
             {
                 Id = login.Id,

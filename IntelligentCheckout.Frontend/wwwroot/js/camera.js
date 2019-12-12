@@ -1,10 +1,4 @@
 ﻿window.initPicture = function () {
-	var canvas = document.createElement('canvas');
-	canvas.width = 800;
-	canvas.height = 600;
-    var context = canvas.getContext('2d');
-    var video = document.getElementById('video');
-
     var mediaConfig = { video: true };
 
     var errBack = function (e) {
@@ -12,10 +6,13 @@
     };
 
 	window.startPicture = function () {
+		var video = document.getElementById('video');
+
 		if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
 			navigator.mediaDevices.getUserMedia(mediaConfig).then(function (stream) {
 				video.srcObject = stream;
 				video.play();
+				console.log(video.srcObject);
 			});
 		}
 
@@ -38,19 +35,29 @@
 	};
 
 	window.snapPicture = function () {
+		var canvas = document.createElement('canvas');
+		canvas.width = 800;
+		canvas.height = 600;
+		var context = canvas.getContext('2d');
 		context.drawImage(video, 0, 0, 800, 600);
 	};
 
 	window.exportPicture = function () {
+		var canvas = document.createElement('canvas');
+		canvas.width = 800;
+		canvas.height = 600;
+		var context = canvas.getContext('2d');
+		context.drawImage(video, 0, 0, 800, 600);
 		return canvas.toDataURL("image/jpeg", 0.5);
 	};
 
 	window.stopPicture = function () {
-		video.pause();
+		var video = document.getElementById('video');
+
 		if (video.srcObject && video.srcObject.getTracks()) {
 			video.srcObject.getTracks().forEach(function (track) { track.stop(); });
 		}
-		video.srcObject = null;
-		video.src = null;
+		video.pause();
+		video.load();
 	};
 }

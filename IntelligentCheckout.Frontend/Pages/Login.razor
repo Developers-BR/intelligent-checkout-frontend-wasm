@@ -60,15 +60,6 @@
         NavigationManager.NavigateTo("/criar-pessoa");
     }
 
-    protected override async Task OnAfterRenderAsync(bool firstRender)
-    {
-        if (firstRender)
-        {
-            await JSRuntime.InvokeVoidAsync("initPicture");
-        }
-        await base.OnAfterRenderAsync(firstRender);
-    }
-
     async Task FecharModal()
     {
         await JSRuntime.InvokeVoidAsync("stopPicture");
@@ -78,6 +69,7 @@
 
     async Task AbrirModal()
     {
+        await JSRuntime.InvokeVoidAsync("initPicture");
         ObterFoto.Style = "display: block; opacity: 1;";
         ObterFoto.Show();
         await JSRuntime.InvokeVoidAsync("startPicture");
