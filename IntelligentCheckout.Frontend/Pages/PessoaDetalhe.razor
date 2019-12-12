@@ -2,7 +2,7 @@
 @inject HttpClient HttpClient
 @inject PessoaService PessoaService
 
-<h3>@PessoaService.ObterPessoaAtual()Nome.</h3>
+<h3>@PessoaService.ObterPessoaAtual().Nome</h3>
 <h4>Compras finalizadas</h4>
 
 @if (Compras == null || Compras.Data == null)
